@@ -1,0 +1,325 @@
+import java.io.FileNotFoundException;
+import java.text.DecimalFormat;
+import java.io.PrintWriter;
+import java.util.Scanner;
+import java.io.File;
+/*
+ * Class: CMSC203 21076
+ * Instructor: Khandan Monshi
+ * Description: This class works with a 2D ragged array to complete different methods and
+ * return information about the array
+ * Due: 11/29/2022
+ * Platform/compiler: Eclipse
+ * I, Dashawna Lara, pledge that I, Dashawna Lara, have completed the programming 
+ * assignment independently. I, Dashawna Lara, have not copied the code 
+ * from a student or any source. I have not given my code 
+ * to any student.
+   Print your Name here: Dashawna Lara
+*/
+/**
+ * This class works with a 2D ragged array to complete different methods and
+ * return information about the array
+ * @author Dasha
+ *
+ */
+public class TwoDimRaggedArrayUtility {
+	
+	//Constants to represent the max amount of rows and columns allowed
+	final static int MAX_ROW = 10;
+	final static int MAX_COLUMN = 10;
+	
+	//No-arg constructor
+	public TwoDimRaggedArrayUtility() {
+		
+	}
+	/**
+	 * Method reads from a file and creates/returns a 2D ragged array
+	 * @param file
+	 * @return double[][]
+	 * @throws FileNotFoundException
+	 */
+	public static double[][] readFile(File file) throws FileNotFoundException {
+		int tempRow = 0; 
+		Scanner fileScan = new Scanner(file);
+		String[][] temp = new String[MAX_ROW][MAX_COLUMN];  
+		
+		while(fileScan.hasNext()) {
+			String loopTemp[] = fileScan.nextLine().split(" ");
+			temp[tempRow] = new String[loopTemp.length];
+
+			for(int x = 0; x < temp[tempRow].length; x++) {
+				temp[tempRow][x] = loopTemp[x];
+			}
+			tempRow++;
+		}
+		
+		double[][] data = new double[temp.length][];
+		for(int row = 0; row < temp[row].length; row++) {
+			data[row] = new double[temp.length];
+			for(int col = 0; col < temp[row].length; col++) {
+				data[row][col] = Double.parseDouble(temp[row][col]);
+			}
+		}
+		return data;
+	}
+	/**
+	 * Void method accepts a double[][] and a File argument to write the 2D array to the file
+	 * @param data
+	 * @param outputFile
+	 * @throws FileNotFoundException
+	 */
+	public static void writeToFile(double[][] data, File outputFile) throws FileNotFoundException{
+		PrintWriter output = new PrintWriter(outputFile);
+		String temp = "";
+		for(int row = 0; row < data.length; row++) {
+			for(int col = 0; col < data[row].length; col++) {
+				temp += data[row][col] + " ";
+			}
+			output.println(temp);
+		}	
+		output.close();
+	}
+	/**
+	 * Take a 2D array as a parameter and return the total of all the doubles in the array; 
+	 * @param data
+	 * @return double
+	 */
+	public static double getTotal(double[][] data) {
+		double sum = 0.0; 
+		for(int row = 0; row < data.length; row++) {
+			for (int col = 0; col < data[row].length; col++) {
+				if(data[row][col] != 0) {
+					sum += data[row][col];
+				}
+			}
+		}
+		return sum;
+	}
+	/**
+	 * Take a 2D array as a parameter and return the average of all the doubles in the array; 
+	 * @param data
+	 * @returnm double
+	 */
+	public static double getAverage(double[][] data) {
+		//DecimalFormal object to format the average to 2 decimal places
+		DecimalFormat format = new DecimalFormat("0.00");
+		double sum = getTotal(data);
+		double totalElements = 0;
+		for(int row = 0; row < data.length; row++) {
+			for(int col = 0; col < data[row].length; col++) {
+				totalElements++;
+			}
+		}
+		//Return the formatted average
+		return Double.parseDouble(format.format((sum/totalElements)));
+	}
+	/**
+	 * Takes a 2D array and an integer representing the index of the row and return the total 
+	 * of the doubles in that row
+	 * @param data
+	 * @param row
+	 * @return double 
+	 */
+	public static double getRowTotal(double[][] data, int row) {
+		
+		double sum = 0.0;
+		for(int x = 0; x < data[row].length; x++) {
+			if(data[row][x] != 0) {
+				sum += data[row][x];		
+			}
+		}
+	
+		return sum; 
+	}
+	/**
+	 * Takes a 2D array and an integer representing the index of the column and returns the total 
+	 * of the doubles in that column
+	 * @param data
+	 * @param col
+	 * @return double
+	 */
+	public static double getColumnTotal(double[][] data, int col) {
+		double sum = 0.0;
+		for(int x = 0; x < data.length; x++) {
+			if(data[x].length > col) {
+				sum += data[x][col];
+			}
+		}
+		return sum;
+	}
+	/**
+	 * Takes a 2D array and an integer representing the index of the row and returns the highest double 
+	 * in that row
+	 * @param data
+	 * @param row
+	 * @return double 
+	 */
+	public static double getHighestInRow(double[][] data, int row) {
+		double high = data[row][0];
+		for(int x = 1; x < data[row].length; x++) {
+			if(data[row][x] > high) {
+				high = data[row][x];
+			}
+		}
+		
+		
+		return high;
+	}
+	
+	/**
+	 * Takes a 2D array and an integer representing the row index and returns 
+	 * the index of the highest double int that row
+	 * @param data
+	 * @param row
+	 * @return integer
+	 */
+	public static int getHighestInRowIndex(double[][] data, int row) {
+		double high = data[row][0];
+		int highIndex = 0;
+		for(int x = 1; x < data[row].length; x++) {
+			if(data[row][x] > high) {
+				high = data[row][x];
+				highIndex = x;
+			}
+		}
+		return highIndex;
+	}
+	/**
+	 * Takes a 2D array and an integer representing the index of the row and returns the lowest double 
+	 * in that row
+	 * @param data
+	 * @param row
+	 * @return double 
+	 */
+	public static double getLowestInRow(double[][] data, int row) {
+		double low = data[row][0];
+		for(int x = 1; x < data[row].length; x++) {
+			if(data[row][x] < low) {
+				low = data[row][x];
+			}
+		}
+		return low;
+	}
+	/**
+	 * Takes a 2D array and an integer representing the index of the row and returns the indext lowest double 
+	 * in that row
+	 * @param data
+	 * @param row
+	 * @return double 
+	 */
+	public static int getLowestInRowIndex(double[][] data, int row) {
+		double low = data[row][0];
+		int lowIndex = 0;
+		for(int x = 1; x < data[row].length; x++) {
+			if(data[row][x] < low) {
+				low = data[row][x];
+				lowIndex = x;
+			}
+		}
+		return lowIndex;
+	}
+	/**
+	 * Takes a 2D array and an integer representing the index of the column and returns
+	 * the highest double in that column
+	 * @param data
+	 * @param col
+	 * @return double
+	 */
+	public static double getHighestInColumn(double[][] data, int col) {
+		double high = Double.MIN_VALUE;
+		for(int x = 0; x < data.length; x++) {
+			if(data[x].length > col) {
+				if(data[x][col] > high) {
+					high = data[x][col];
+				}
+			}
+		}
+		return high;
+	}
+	/**
+	 * Takes a 2D array and an integer representing the index of the column and returns 
+	 * the index of the highest double in that column
+	 * @param data
+	 * @param col
+	 * @return integer
+	 */
+	public static int getHighestInColumnIndex(double[][] data, int col) {
+		double high = Double.MIN_VALUE;
+		int highIndex = 0;
+		for(int x = 0; x < data.length; x++) {
+			if(data[x].length > col) {
+				if(data[x][col] > high) {
+					high = data[x][col];
+					highIndex = col;
+				}
+			}
+		}
+		return highIndex;
+	}
+	/**
+	 * Takes a 2D array and an integer representing the column and returns the
+	 * lowest double in that column
+	 * @param data
+	 * @param col
+	 * @return double
+	 */
+	public static double getLowestInColumn(double[][] data, int col) {
+		double low = Double.MAX_VALUE;
+		for(int x = 0; x < data.length; x++) {
+			if(data[x].length > col) {
+				if(data[x][col] < low) {
+					low = data[x][col];
+				}
+			}
+		}
+		return low;
+	}
+	/**
+	 * Takes a 2D array and an integer representing the column and returns the
+	 * index of the lowest double in that column
+	 * @param data
+	 * @param col
+	 * @return double
+	 */
+	public static int getLowestInColumnIndex(double[][] data, int col) {
+		double low = Double.MAX_VALUE;
+		int lowIndex = 0;
+		for(int x = 0; x < data.length; x++) {
+			if(data[x].length > col){
+				if(data[x][col] < low) {
+					low = data[x][col];
+					lowIndex = col;
+				}
+			}
+		}
+		return lowIndex;
+	}
+	/**
+	 * Takes a 2D array and returns the highest double in that array
+	 * @param data
+	 * @return double 
+	 */
+	public static double getHighestInArray(double[][] data) {
+		double highest = getHighestInRow(data, 0);
+		for(int x = 1; x < data.length; x++) {
+			if(highest < getHighestInRow(data, x)) {
+				highest = getHighestInRow(data, x);
+			}
+		}
+		return highest;
+	}
+	/**
+	 * Takes a 2D array and returns the lowest double in that array
+	 * @param data
+	 * @return double 
+	 */
+	public static double getLowestInArray(double[][] data) {
+		double lowest = getLowestInRow(data, 0);
+		for(int x = 1; x < data.length; x++) {
+			if(lowest > getLowestInRow(data, x)) {
+				lowest = getLowestInRow(data, x);
+			}
+		}
+		return lowest;
+	}
+}
