@@ -1,0 +1,72 @@
+/*
+ * Class: CMSC203 21076
+ * Instructor: Khandan Monshi
+ * Description: A class to calculate bonuses. Uses the TwoDimRaggedArrayUtility class
+ * Due: 11/29/2022
+ * Platform/compiler: Eclipse
+ * I, Dashawna Lara, pledge that I, Dashawna Lara, have completed the programming 
+ * assignment independently. I, Dashawna Lara, have not copied the code 
+ * from a student or any source. I have not given my code 
+ * to any student.
+   Print your Name here: Dashawna Lara
+*/
+
+public class HolidayBonus {
+	//Constants representing the amount of the bonus for the lowest double in the column, 
+	//the highest number, and every other number
+	
+	final static int LOW = 1000;
+	final static int OTHER = 2000;
+	final static int HIGH = 5000;
+	
+	/**
+	 * No-arg constructor
+	 */
+	public HolidayBonus(){
+		
+	}
+	/**
+	 * Takes a 2D array as an argument and returns an array of double with each index representing the 
+	 * total amount of the bonuses for each column of the 2D array.
+	 * @param data
+	 * @return double[]
+	 */
+	public static double[] calculateHolidayBonus(double[][] data) {
+		//Array to hold the bonuses of each column of the 2D array
+		double[] calculatedBonuses = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+		
+		for(int row = 0; row < data.length; row++) {
+			for(int col = 0; col < data[row].length; col++) {
+				if(data[row][col] < 0){
+					calculatedBonuses[row] += 0;
+				}
+				else if(TwoDimRaggedArrayUtility.getHighestInColumn(data, col) == data[row][col]) {
+					calculatedBonuses[row] += HIGH;
+				}
+				else if(TwoDimRaggedArrayUtility.getLowestInColumn(data, col) == data[row][col]) {
+					calculatedBonuses[row] += LOW;
+				}
+				else if(data[row][col] > TwoDimRaggedArrayUtility.getLowestInColumn(data, col) && data[row][col] < TwoDimRaggedArrayUtility.getHighestInColumn(data, col)) {
+					calculatedBonuses[row] += OTHER;
+				}
+				
+			}
+		}
+		return calculatedBonuses;
+	}
+	/**
+	 * Takes a 2D array as an argument and 
+	 * returns the total amount of all bonuses in the 2D array
+	 * @param data
+	 * @return double 
+	 */
+	public static double calculateTotalHolidayBonus(double[][] data) {
+		double total = 0.0;//Double 
+		double[] calculatedBonuses = calculateHolidayBonus(data);
+		for(int x = 0; x < calculatedBonuses.length; x++) {
+			total += calculatedBonuses[x];
+		}
+		return total;
+	}
+
+}
